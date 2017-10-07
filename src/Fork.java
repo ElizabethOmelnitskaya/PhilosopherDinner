@@ -4,33 +4,25 @@ public class Fork {
     private static int k = 0;
     private int count = ++k;
 
-//    public Fork(int n){
-//        this.k = n;
-//    }
+    public Fork(int n){
+        this.k = n;
+    }
 
-    public synchronized void onTake() {
+    public synchronized void onTake() throws InterruptedException{
         while (Use) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
+            wait();
         }
         Use = true;
-        System.out.println(Thread.currentThread().getName() + ": take fork_" + count);
+       //System.out.println(Thread.currentThread().getName() + ": take fork_" + count);
         notify();
     }
 
-    public synchronized void onPut() {
+    public synchronized void onPut() throws InterruptedException{
         while (!Use) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
+            wait();
         }
         Use = false;
-        System.out.println(Thread.currentThread().getName() + ": put fork_" + count);
+        //System.out.println(Thread.currentThread().getName() + ": put fork_" + count);
         notify();
     }
 }

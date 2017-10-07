@@ -3,8 +3,8 @@ public class Philosopher implements Runnable {
     private Fork rightFork; // правая вилка (вилка 1)
     private Fork leftFork; // левая вилка (вилка 2)
 
-    private long eatTime = 0; // время есть
-    private long thinkTime = 0; // время думать
+    private long eatTime = 1; // время есть
+    private long thinkTime = 1; // время думать
 
     private long eaten = 0; // всего съел
     private long thinkOfEverything = 0; // всего думал
@@ -15,40 +15,48 @@ public class Philosopher implements Runnable {
         leftFork = l;
     }
 
-    public void eat() { // функция приема пищи
+    public void eat() throws InterruptedException{ // функция приема пищи
         rightFork.onTake(); // взяли правую вилку
         leftFork.onTake(); // взяли левую вилку
-        try {
             Thread.sleep(eatTime);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
-    public synchronized void think() { // функция думать
-        try {
+    public synchronized void think() throws InterruptedException { // функция думать
             Thread.sleep(thinkTime);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
-    public void put() { // функция освобождения вилок
+    public void put() throws InterruptedException { // функция освобождения вилок
         rightFork.onPut(); // положили правую вилку
         leftFork.onPut(); // положили левую вилку
     }
 
-    @Override
-    public void run() {
-        while(true) {
-            eat(); // философ поел
-            put(); // освободил вилки
-            System.out.println(Thread.currentThread().getName()+": Eaten: [" + eaten + "]");
-            this.eaten++;
-            think(); // подумал
-            this.thinkOfEverything++;
-            System.out.println(Thread.currentThread().getName()+": ThinkOfEverything:[" + thinkOfEverything + "]");
-        }
+    public long Eaten(){
+        return eaten;
     }
 
+    public long ThinkOfEveryting(){
+        return thinkOfEverything;
+    }
+
+    @Override
+    public void run() {
+        while(!Thread.currentThread().isInterrupted()) {
+            try {
+                eat(); // философ поел
+                put(); // освободил вилки
+            } catch (InterruptedException e) {
+                return;
+            }
+            //System.out.println(Thread.currentThread().getName()+": Eaten: [" + eaten + "]");
+            this.eaten++;
+            try {
+                think(); // подумал
+            } catch (InterruptedException e) {
+                return;
+            }
+            this.thinkOfEverything++;
+            //System.out.println(Thread.currentThread().getName()+": ThinkOfEverything:[" + thinkOfEverything + "]");
+        }
+
+    }
 }
