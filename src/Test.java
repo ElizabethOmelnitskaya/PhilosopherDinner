@@ -15,7 +15,6 @@ public class Test {
         for (int i = 0; i < N; i++) {
 
             if (i == p.length - 1) {
-                // Последний философ сначала берет правую вилку
                 p[i] = new Philosopher(forks[i], forks[(i + 1) % N]);
             } else {
                 p[i] = new Philosopher(forks[(i + 1) % N], forks[i]);
@@ -28,7 +27,7 @@ public class Test {
 
         try {
             System.out.println(Thread.currentThread().getName());
-            Thread.sleep(5000);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
         }
 

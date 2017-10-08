@@ -7,7 +7,7 @@ public class Philosopher implements Runnable {
     private int count = k++;
 
     private long eatTime = 0; // время есть
-    private long thinkTime = 1; // время думать
+    private long thinkTime = 0; // время думать
 
     private long eaten = 0; // всего съел
     private long thinkOfEverything = 0; // всего думал
