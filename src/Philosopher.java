@@ -3,12 +3,14 @@ public class Philosopher implements Runnable {
     private Fork rightFork; // правая вилка (вилка 1)
     private Fork leftFork; // левая вилка (вилка 2)
 
-    private long eatTime = 1; // время есть
+    private static int k = 0;
+    private int count = k++;
+
+    private long eatTime = 0; // время есть
     private long thinkTime = 1; // время думать
 
     private long eaten = 0; // всего съел
     private long thinkOfEverything = 0; // всего думал
-
 
     public Philosopher(Fork r, Fork l) {
         rightFork = r;
@@ -18,11 +20,11 @@ public class Philosopher implements Runnable {
     public void eat() throws InterruptedException{ // функция приема пищи
         rightFork.onTake(); // взяли правую вилку
         leftFork.onTake(); // взяли левую вилку
-            Thread.sleep(eatTime);
+        Thread.sleep(eatTime);
     }
 
     public synchronized void think() throws InterruptedException { // функция думать
-            Thread.sleep(thinkTime);
+        Thread.sleep(thinkTime);
     }
 
     public void put() throws InterruptedException { // функция освобождения вилок
@@ -47,7 +49,6 @@ public class Philosopher implements Runnable {
             } catch (InterruptedException e) {
                 return;
             }
-            //System.out.println(Thread.currentThread().getName()+": Eaten: [" + eaten + "]");
             this.eaten++;
             try {
                 think(); // подумал
@@ -55,7 +56,6 @@ public class Philosopher implements Runnable {
                 return;
             }
             this.thinkOfEverything++;
-            //System.out.println(Thread.currentThread().getName()+": ThinkOfEverything:[" + thinkOfEverything + "]");
         }
 
     }
