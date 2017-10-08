@@ -12,6 +12,7 @@ public class Test {
         // количество философов соответствует количеству вилок
         Thread t[] = new Thread[N]; // создаем потоки
         Philosopher p[] = new Philosopher[N];// coздаем массив философов
+         /*!!!!!!!!!!!!!!!!!!!!!!*/
         for (int i = 0; i < N; i++) {
 
             if (i == p.length - 1) {
@@ -19,7 +20,7 @@ public class Test {
             } else {
                 p[i] = new Philosopher(forks[(i + 1) % N], forks[i]);
             }
-
+             /*!!!!!!!!!!!!!!!!!!!!!!*/
 
             t[i] = new Thread(p[i], "Philosopher: " + (i));
             t[i].start(); // стартуем
