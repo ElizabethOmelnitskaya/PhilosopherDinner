@@ -6,31 +6,31 @@ public class Test {
         // создаем вилки
         Fork forks[] = new Fork[N];
         for (int i = 0; i < N; i++) {
-            forks[i] = new Fork(i);
+            forks[i] = new Fork();
         }
 
         // количество философов соответствует количеству вилок
         Thread t[] = new Thread[N]; // создаем потоки
-        Philosopher p[] = new Philosopher[N];// coздаем массив философов
-         /*!!!!!!!!!!!!!!!!!!!!!!*/
+        final Philosopher p[] = new Philosopher[N];// coздаем массив философов
         for (int i = 0; i < N; i++) {
 
-            if (i == p.length - 1) {
-                p[i] = new Philosopher(forks[i], forks[(i + 1) % N]);
+            if (i == 0) {
+                p[i] = new Philosopher(forks[N - 1], forks[i]);
             } else {
-                p[i] = new Philosopher(forks[(i + 1) % N], forks[i]);
+                p[i] = new Philosopher(forks[i - 1], forks[i]);
             }
-             /*!!!!!!!!!!!!!!!!!!!!!!*/
 
-            t[i] = new Thread(p[i], "Philosopher: " + (i));
+
+            t[i] = new Thread(p[i], "Philosopher: " + (i + 1));
+        }
+        for(int i = 0; i < N; i++){
             t[i].start(); // стартуем
         }
 
         try {
             System.out.println(Thread.currentThread().getName());
             Thread.sleep(1000);
-        } catch (InterruptedException e) {
-        }
+        } catch (InterruptedException e) {}
 
         //остановка потоков
         for (int i = 0; i < N; i++) {
@@ -41,7 +41,7 @@ public class Test {
         // вывод статистики
         // философ всего поел
         for (int i = 0; i < N; i++) {
-            System.out.println("Philosopher: " + i + " - Eaten:[" + p[i].Eaten() + "]");
+            System.out.println("Philosopher: " + (i+1) + " - Eaten:[" + p[i].Eaten() + "]");
         }
     }
 }

@@ -1,26 +1,32 @@
 public class Philosopher implements Runnable {
 
-    private Fork rightFork; // правая вилка (вилка 1)
-    private Fork leftFork; // левая вилка (вилка 2)
+    private Fork rightFork; // правая вилка (вилка 1) fork_1
+    private Fork leftFork; // левая вилка (вилка 2)fork_2
 
     private static int k = 0;
     private int count = k++;
 
     private long eatTime = 0; // время есть
-    private long thinkTime = 0; // время думать
+    private long thinkTime = 1; // время думать
 
-    private long eaten = 0; // всего съел
-    private long thinkOfEverything = 0; // всего думал
+    private long eaten; // всего съел
+    private long thinkOfEverything; // всего думал thought
 
     public Philosopher(Fork r, Fork l) {
         rightFork = r;
         leftFork = l;
+        eaten = 0;
+        thinkOfEverything = 0;
     }
 
-    public void eat() throws InterruptedException{ // функция приема пищи
-        rightFork.onTake(); // взяли правую вилку
-        leftFork.onTake(); // взяли левую вилку
-        Thread.sleep(eatTime);
+    public boolean eat(Fork r, Fork l) throws InterruptedException { // функция приема пищи
+        rightFork.onTake(1); // взяли правую вилку
+        if(!leftFork.onTake(2)){
+            rightFork.onPut();
+            eat(rightFork, leftFork);
+        }
+        else Thread.sleep(eatTime);
+        return true;
     }
 
     public synchronized void think() throws InterruptedException { // функция думать
@@ -32,19 +38,19 @@ public class Philosopher implements Runnable {
         leftFork.onPut(); // положили левую вилку
     }
 
-    public long Eaten(){
+    public long Eaten() {
         return eaten;
     }
 
-    public long ThinkOfEveryting(){
+    public long ThinkOfEveryting() {
         return thinkOfEverything;
     }
 
     @Override
     public void run() {
-        while(!Thread.currentThread().isInterrupted()) {
+        while (!Thread.currentThread().isInterrupted()) {
             try {
-                eat(); // философ поел
+                eat(this.rightFork, this.leftFork); // философ поел
                 put(); // освободил вилки
             } catch (InterruptedException e) {
                 return;
@@ -60,3 +66,7 @@ public class Philosopher implements Runnable {
 
     }
 }
+//    public String stat () {
+//        String str = "" + eaten;
+//        return str;
+//    }
